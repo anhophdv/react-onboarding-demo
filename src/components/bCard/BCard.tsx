@@ -1,17 +1,7 @@
 import React from "react";
-import { Card, Stack, Box, Button, IconButton, Icon } from "@mui/material";
-import { AppColorConstants } from "../../utils/AppConstants";
-
-import DescriptionSection from "../description_section/DescriptionSection";
+import { Box } from "@mui/material";
 import BCardHeader from "../header/BCardHeader";
 import { Container } from "@mui/system";
-import {
-  Facebook,
-  GitHub,
-  Instagram,
-  Mail,
-  Twitter,
-} from "@mui/icons-material";
 import BCardContent from "../bcard_content/BCardContent";
 import BCardBottom from "../bCard_bottom/BCardBottom";
 
