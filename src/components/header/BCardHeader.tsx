@@ -32,11 +32,6 @@ export default function BCardHeader(props: ICardHeader) {
     };
     buttons.unshift(emailButton);
   }
-
-  const openInNewTab = (url: string) => {
-    window.open(url);
-  };
-
   const containerPadding = { xs: 1, sm: 1, lg: 2, xl: 2 };
 
   return (
@@ -88,6 +83,10 @@ interface ISocialButton {
 }
 
 function SocialButton(buttons: ISocialButton[]) {
+  const openInNewTab = (url: string) => {
+    window.open(url);
+  };
+
   return (
     <Container
       sx={{
@@ -114,7 +113,13 @@ function SocialButton(buttons: ISocialButton[]) {
               justifyContent: "center",
             }}
           >
-            <Button variant="contained" sx={{ flex: 1, textOverflow: "clip" }}>
+            <Button
+              variant="contained"
+              sx={{ flex: 1, textOverflow: "clip" }}
+              onClick={() => {
+                openInNewTab(item.value ?? "");
+              }}
+            >
               {item.title}
             </Button>
           </Grid>
