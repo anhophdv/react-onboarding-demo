@@ -67,7 +67,7 @@ export default function AppContainer() {
     >
       <Grid
         container
-        spacing={{ xs: 2, sm: 2, lg: 5 }}
+        spacing={{ xs: 2, sm: 2, lg: 5, xl: 5 }}
         sx={{
           flex: 1,
           bgcolor: AppColorConstants.BG_COLOR_APP,
@@ -77,7 +77,7 @@ export default function AppContainer() {
         }}
       >
         {people.map((value, _) => (
-          <Grid item xs={6} key={value.id}>
+          <Grid item key={value.id} sx={{ flex: 1 }}>
             <BCard
               id={value.id}
               firstName={value.firstName}

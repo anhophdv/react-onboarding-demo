@@ -47,7 +47,7 @@ export function BCard(props: IPerson) {
           borderRadius: 4,
         }}
       >
-        <Container>
+        <Container sx={{ paddingX: { xs: 1, sm: 1, lg: 3, xl: 3 } }}>
           <BCardHeader
             avatarURL={props.avatarURL}
             firstName={props.firstName}

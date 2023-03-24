@@ -37,11 +37,10 @@ export default function BCardHeader(props: ICardHeader) {
     window.open(url);
   };
 
-  const containerPaddingX = { xs: 2, sm: 2, lg: 7, xlg: 7 };
-  const containerPaddingY = { xs: 1, sm: 1, lg: 2, xlg: 2 };
+  const containerPadding = { xs: 1, sm: 1, lg: 2, xl: 2 };
 
   return (
-    <>
+    <Box>
       <Box display={"flex"} sx={{ justifyContent: "center" }}>
         <Avatar
           src={ManImageResources}
@@ -49,13 +48,16 @@ export default function BCardHeader(props: ICardHeader) {
         />
       </Box>
       <Container
-        sx={{ paddingX: containerPaddingX, paddingY: containerPaddingY }}
+        sx={{
+          padding: containerPadding,
+        }}
       >
         <Box
           display={"flex"}
           sx={{
             justifyContent: "center",
             flexDirection: "column",
+            marginBottom: 2,
           }}
         >
           <Typography variant="h4" sx={{ color: "white", textAlign: "center" }}>
@@ -76,7 +78,7 @@ export default function BCardHeader(props: ICardHeader) {
         </Box>
         {SocialButton(buttons)}
       </Container>
-    </>
+    </Box>
   );
 }
 
@@ -86,32 +88,38 @@ interface ISocialButton {
 }
 
 function SocialButton(buttons: ISocialButton[]) {
-  const boxMarginY = { xs: 1, sm: 1, lg: 2, xlg: 2 };
   return (
-    <Box
-      display="flex"
+    <Container
       sx={{
-        flexDirection: "row",
         flex: 1,
-        marginY: boxMarginY,
       }}
     >
       <Grid
         container
-        spacing={2}
+        columnSpacing={2}
+        rowSpacing={2}
         alignItems={"center"}
         sx={{
-          justifyContent: "center",
+          flexDirection: { xs: "column", sm: "column", lg: "row", xl: "row" },
         }}
       >
         {buttons.map((item, index) => (
-          <Grid display={"flex"} item key={index} sx={{ width: 1 / 2 }}>
-            <Button variant="contained" sx={{ flex: 1 }}>
+          <Grid
+            display={"flex"}
+            item
+            key={index}
+            sx={{
+              flex: 1,
+              width: { xs: 1, sm: 1, lg: 1 / 2, xl: 1 / 2 },
+              justifyContent: "center",
+            }}
+          >
+            <Button variant="contained" sx={{ flex: 1, textOverflow: "clip" }}>
               {item.title}
             </Button>
           </Grid>
         ))}
       </Grid>
-    </Box>
+    </Container>
   );
 }

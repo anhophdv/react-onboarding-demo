@@ -1,6 +1,5 @@
 import { Facebook, GitHub, Instagram, Twitter } from "@mui/icons-material";
 import { Box, IconButton, Stack } from "@mui/material";
-import { margin, width } from "@mui/system";
 import React from "react";
 
 export default function BCardBottom() {
@@ -12,14 +11,13 @@ export default function BCardBottom() {
         backgroundColor: "#161618",
         borderBottomLeftRadius: 8,
         borderBottomRightRadius: 8,
+        flexWrap: "wrap",
       }}
     >
       <Stack
         direction={"row"}
-        spacing={2}
+        spacing={{ xs: 1, sm: 1, lg: 2, xl: 2 }}
         sx={{
-          flexFlow: 1,
-
           height: 50,
           justifyContent: "center",
         }}
