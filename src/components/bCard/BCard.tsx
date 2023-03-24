@@ -5,7 +5,8 @@ import { Container } from "@mui/system";
 import BCardContent from "../bcard_content/BCardContent";
 import BCardBottom from "../bCard_bottom/BCardBottom";
 
-interface ICardItem {
+export interface IPerson {
+  id: number;
   firstName: string;
   lastName: string;
   avatarURL: string;
@@ -17,17 +18,27 @@ interface ICardItem {
   linkedInURL: string;
   aboutDescription?: string;
   interestDescription?: string;
+  socialInfo?: ISocialInfo;
 }
 
-export function BCard(props: ICardItem) {
+export interface ISocialInfo {
+  email?: string;
+  linkedInUrl?: string;
+  twitterUrl?: string;
+  fbUrl?: string;
+  instagramUrl?: string;
+  githubUrl?: string;
+}
+
+export function BCard(props: IPerson) {
   return (
     <Box
       display={"flex"}
       sx={{
         flexDirection: "column",
         bgcolor: "#24252E",
-        paddingX: 12,
-        paddingY: 6,
+        paddingX: { xs: 2, sm: 3, lg: 12, xlg: 14 },
+        paddingY: { xs: 2, lg: 6 },
       }}
     >
       <Box
@@ -43,6 +54,7 @@ export function BCard(props: ICardItem) {
             lastName={props.lastName}
             job={props.job}
             department={props.job}
+            socialInfo={props.socialInfo}
           />
           <BCardContent
             aboutDescription={props.aboutDescription ?? ""}

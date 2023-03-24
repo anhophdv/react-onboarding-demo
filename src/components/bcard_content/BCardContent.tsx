@@ -8,10 +8,15 @@ interface ICardContent {
 }
 
 export default function BCardContent(props: ICardContent) {
+  const containerPaddingX = { xs: 2, sm: 2, lg: 5, xlg: 5 };
+  const containerPaddingY = { xs: 1, sm: 1, lg: 2, xlg: 2 };
+
   return (
     <>
-      <Container sx={{ paddingX: 7, paddingY: 2 }}>
-        <Stack spacing={5} sx={{ paddingY: 3 }}>
+      <Container
+        sx={{ paddingX: containerPaddingX, paddingY: containerPaddingY }}
+      >
+        <Stack spacing={5} sx={{ paddingY: containerPaddingY }}>
           <DescriptionSection
             title="About"
             descriptionValue={props.aboutDescription}

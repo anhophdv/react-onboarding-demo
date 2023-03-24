@@ -3,11 +3,12 @@ import {
   Box,
   Button,
   Container,
-  Stack,
+  Grid,
   Typography,
 } from "@mui/material";
 import React from "react";
 import ManImageResources from "../../assets/images/ic_man.png";
+import { ISocialInfo } from "../bCard/BCard";
 
 interface ICardHeader {
   avatarURL: string;
@@ -15,24 +16,46 @@ interface ICardHeader {
   lastName: string;
   job: string;
   department: string;
+  socialInfo?: ISocialInfo;
 }
 
 export default function BCardHeader(props: ICardHeader) {
+  const linkedInButton: ISocialButton = {
+    title: "LinkedIn",
+    value: props.socialInfo?.linkedInUrl,
+  };
+  var buttons: ISocialButton[] = [linkedInButton];
+  if (props.socialInfo?.email) {
+    const emailButton: ISocialButton = {
+      title: "Email",
+      value: props.socialInfo?.email,
+    };
+    buttons.unshift(emailButton);
+  }
+
+  const openInNewTab = (url: string) => {
+    window.open(url);
+  };
+
+  const containerPaddingX = { xs: 2, sm: 2, lg: 7, xlg: 7 };
+  const containerPaddingY = { xs: 1, sm: 1, lg: 2, xlg: 2 };
+
   return (
-    <Box>
+    <>
       <Box display={"flex"} sx={{ justifyContent: "center" }}>
         <Avatar
           src={ManImageResources}
           sx={{ width: 1 / 2, height: 1 / 2, justifyContent: "center" }}
         />
       </Box>
-      <Container sx={{ paddingX: 7, paddingY: 2 }}>
+      <Container
+        sx={{ paddingX: containerPaddingX, paddingY: containerPaddingY }}
+      >
         <Box
           display={"flex"}
           sx={{
             justifyContent: "center",
             flexDirection: "column",
-            margin: 1,
           }}
         >
           <Typography variant="h4" sx={{ color: "white", textAlign: "center" }}>
@@ -51,37 +74,44 @@ export default function BCardHeader(props: ICardHeader) {
             {props.department}
           </Typography>
         </Box>
-        <Stack
-          direction={"row"}
-          spacing={2}
-          sx={{ padding: 2, justifyContent: "center" }}
-        >
-          <Button variant="contained" sx={{ width: 1 / 4 }}>
-            Email
-          </Button>
-          <Button variant="contained" sx={{ width: 1 / 4 }}>
-            LinkedIn
-          </Button>
-        </Stack>
+        {SocialButton(buttons)}
       </Container>
-    </Box>
+    </>
   );
 }
 
-interface IButtonSection {
-  iconName: string;
+interface ISocialButton {
   title: string;
+  value?: string;
 }
 
-function ButtonSection(props: IButtonSection[]) {
+function SocialButton(buttons: ISocialButton[]) {
+  const boxMarginY = { xs: 1, sm: 1, lg: 2, xlg: 2 };
   return (
-    <Stack direction={"row"} spacing={2} sx={{ paddingX: 10, paddingY: 1 }}>
-      <Button variant="contained" sx={{ width: 1 / 2 }}>
-        Email
-      </Button>
-      <Button variant="outlined" sx={{ width: 1 / 2 }}>
-        LinkedIn
-      </Button>
-    </Stack>
+    <Box
+      display="flex"
+      sx={{
+        flexDirection: "row",
+        flex: 1,
+        marginY: boxMarginY,
+      }}
+    >
+      <Grid
+        container
+        spacing={2}
+        alignItems={"center"}
+        sx={{
+          justifyContent: "center",
+        }}
+      >
+        {buttons.map((item, index) => (
+          <Grid display={"flex"} item key={index} sx={{ width: 1 / 2 }}>
+            <Button variant="contained" sx={{ flex: 1 }}>
+              {item.title}
+            </Button>
+          </Grid>
+        ))}
+      </Grid>
+    </Box>
   );
 }
