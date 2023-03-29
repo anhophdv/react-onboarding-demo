@@ -28,7 +28,6 @@ function QuizzicalBottom() {
       sx={{
         flexDirection: "row",
         flexGrow: 1,
-        backgroundColor: "blue",
         justifyContent: "center",
         py: { xs: 1, sm: 2, lg: 3, xl: 3 },
       }}

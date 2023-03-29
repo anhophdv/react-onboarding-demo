@@ -1,6 +1,4 @@
-import React from "react";
 import { createTheme } from "@mui/material";
-import { AppColorConstants } from "../../utils/AppConstants";
 
 const globalTheme = createTheme({
   palette: {
