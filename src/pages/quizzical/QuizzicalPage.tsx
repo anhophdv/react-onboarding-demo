@@ -212,7 +212,6 @@ function QuizzicalPage() {
         numAnswerSelection += 1;
       }
     });
-    console.log("@_@_numberAnswerSelection", numAnswerSelection);
     return numAnswerSelection > 0 ? true : false;
   };
 
@@ -227,10 +226,19 @@ function QuizzicalPage() {
       }
     });
     setTotalPoint(point);
+    setSubmitted(true);
   };
+
+  const [submitted, setSubmitted] = useState<boolean>(false);
 
   const playAgain = () => {
     setTotalPoint(null);
+    let resetedQuestions: QuestionProps[] = [];
+    questions.forEach((item) => {
+      item.options.forEach((option) => (option.isSelected = false));
+      resetedQuestions.push(item);
+    });
+    setQuestions(resetedQuestions);
   };
 
   const [showAlert, setShowAlert] = useState<boolean>(false);
