@@ -11,4 +11,5 @@ export namespace AppColorConstants {
   export const BG_ANSWER_UNSELECTED = "#ffffff";
   export const TEXT_COLOR_QUESTION = "#323959";
   export const BG_TRUE_ANSWER = "#95D7A9";
+  export const BG_SUBMIT_BUTTON = "#4C5B9F";
 }

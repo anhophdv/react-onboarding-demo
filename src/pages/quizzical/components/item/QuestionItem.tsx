@@ -32,7 +32,7 @@ function QuestionItem(
                     let currentQuestion = question;
                     currentQuestion.options.forEach((value) => {
                       value.isSelected =
-                        value.id == option.id ? !value.isSelected : false;
+                        value.id === option.id ? !value.isSelected : false;
                     });
                     onSelectOptionForQuestion(currentQuestion);
                   });

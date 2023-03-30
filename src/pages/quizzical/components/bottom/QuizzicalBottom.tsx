@@ -6,22 +6,22 @@ import {
   styled,
   Typography,
 } from "@mui/material";
-import { purple } from "@mui/material/colors";
-import React, { useState } from "react";
+import { AppColorConstants } from "../../../../utils/AppConstants";
 
 const CustomCheckAnswerButton = styled(Button)<ButtonProps>(({ theme }) => ({
   fontSize: 16,
-  color: theme.palette.primary.main,
-  backgroundColor: purple[500],
-  "&:hover": {
-    backgroundColor: purple[700],
-  },
+  color: "white",
+  backgroundColor: AppColorConstants.BG_SUBMIT_BUTTON,
+  // "&:hover": {
+  //   backgroundColor: AppColorConstants.BG_ANSWER_SELECTED,
+  // },
 }));
 
-function QuizzicalBottom() {
-  const [scored, setScored] = useState<{ scored: null | number }>({
-    scored: null,
-  });
+function QuizzicalBottom(
+  scored: null | number,
+  onSubmitAnswer: () => void,
+  onPlayAgain: () => void
+) {
   return (
     <Box
       display={"flex"}
@@ -37,7 +37,7 @@ function QuizzicalBottom() {
           variant="contained"
           size="large"
           onClick={() => {
-            setScored((prevState) => ({ scored: 5 }));
+            onSubmitAnswer();
           }}
         >
           Check answer
@@ -47,9 +47,13 @@ function QuizzicalBottom() {
       {scored && (
         <Stack direction={"row"} columnGap={{ xs: 1, sm: 2, lg: 3, xl: 4 }}>
           <Box display={"flex"} sx={{ flexDirection: "row" }}>
-            <Typography>Your scored is ... correct answer</Typography>
+            <Typography>Your scored is {scored} correct answer</Typography>
           </Box>
-          <CustomCheckAnswerButton variant="contained" size="large">
+          <CustomCheckAnswerButton
+            variant="contained"
+            size="large"
+            onClick={onPlayAgain}
+          >
             Play again
           </CustomCheckAnswerButton>
         </Stack>

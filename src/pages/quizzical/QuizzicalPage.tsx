@@ -1,7 +1,8 @@
 import { Box, Grid } from "@mui/material";
-import { createContext, useState } from "react";
+import { useEffect, useState } from "react";
 import QuestionItem from "./components/item/QuestionItem";
 import QuizzicalBottom from "./components/bottom/QuizzicalBottom";
+import AppAlert from "../../components/alert/AppAlert";
 
 export interface OptionProps {
   id: number;
@@ -13,6 +14,7 @@ export interface QuestionProps {
   id: number;
   value: string;
   options: OptionProps[];
+  answerId: number;
 }
 
 const question1 = () => {
@@ -42,6 +44,7 @@ const question1 = () => {
     id: 1,
     value: "How would one want say goodbye in Spanish?",
     options: options,
+    answerId: 3,
   };
   return question;
 };
@@ -74,6 +77,7 @@ const question2 = () => {
     value:
       "Which best selling toy of 1983 caused hyteria, resulting in riots breaking in stores?",
     options: options,
+    answerId: 1,
   };
   return question;
 };
@@ -105,6 +109,7 @@ const question3 = () => {
     id: 3,
     value: "What is the hottest plannet in our Solar System?",
     options: options,
+    answerId: 4,
   };
   return question;
 };
@@ -136,6 +141,7 @@ const question4 = () => {
     id: 4,
     value: "In which country was the caesar salad invented?",
     options: options,
+    answerId: 2,
   };
   return question;
 };
@@ -167,11 +173,10 @@ const question5 = () => {
     id: 5,
     value: "How many Hearts Does AN Octopus Have?",
     options: options,
+    answerId: 2,
   };
   return question;
 };
-
-const QuestionContext = createContext<QuestionProps[]>([]);
 
 function QuizzicalPage() {
   const [questions, setQuestions] = useState<QuestionProps[]>([
@@ -183,9 +188,60 @@ function QuizzicalPage() {
   ]);
   const containerPaddingX = { xs: 1, sm: 1, md: 5, lg: 20, xl: 30 };
   const containerPaddingY = { xs: 2, sm: 2, md: 5, lg: 10, xl: 10 };
+  const [totalPoint, setTotalPoint] = useState<number | null>(null);
+
+  const onSelectOptionInQuestion = (selectedQuestion: QuestionProps) => {
+    let result: QuestionProps[] = [];
+    questions.forEach((item) => {
+      if (item.id === selectedQuestion.id) {
+        result.push(selectedQuestion);
+      } else {
+        result.push(item);
+      }
+    });
+    setQuestions(result);
+  };
+
+  const validateAnswerSubmittion = () => {
+    let numAnswerSelection: number = 0;
+    questions.map((item) => {
+      let index = item.options.findIndex(
+        (option) => option.isSelected === true
+      );
+      if (index >= 0) {
+        numAnswerSelection += 1;
+      }
+    });
+    console.log("@_@_numberAnswerSelection", numAnswerSelection);
+    return numAnswerSelection > 0 ? true : false;
+  };
+
+  const checkAnswer = () => {
+    let point: number = 0;
+    questions.forEach((question) => {
+      let index = question.options.findIndex(
+        (option) => option.isSelected === true
+      );
+      if (index >= 0 && question.options[index].id === question.answerId) {
+        point += 1;
+      }
+    });
+    setTotalPoint(point);
+  };
+
+  const playAgain = () => {
+    setTotalPoint(null);
+  };
+
+  const [showAlert, setShowAlert] = useState<boolean>(false);
+  useEffect(() => {
+    const timeId = setTimeout(() => {
+      setShowAlert(false);
+    }, 3000);
+    return () => {};
+  }, [showAlert]);
 
   return (
-    // <QuestionContext.Provider value={questions}>
     <Box>
       <Grid
         container
@@ -200,21 +256,25 @@ function QuizzicalPage() {
       >
         {questions.map((question, _) => {
           return QuestionItem(question, (selectedQuestion) => {
-            let result: QuestionProps[] = [];
-            questions.forEach((item) => {
-              if (item.id === selectedQuestion.id) {
-                result.push(selectedQuestion);
-              } else {
-                result.push(item);
-              }
-            });
-            setQuestions(result);
+            onSelectOptionInQuestion(selectedQuestion);
           });
         })}
       </Grid>
-      <QuizzicalBottom />
+      {QuizzicalBottom(
+        totalPoint,
+        () => {
+          if (!validateAnswerSubmittion()) {
+            setShowAlert(true);
+          } else {
+            checkAnswer();
+          }
+        },
+        () => {
+          playAgain();
+        }
+      )}
+      {showAlert && <AppAlert msg="Please choose your answer" />}
     </Box>
-    // </QuestionContext.Provider>
   );
 }
 
