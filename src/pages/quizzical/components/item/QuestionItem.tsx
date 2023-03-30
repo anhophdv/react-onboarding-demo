@@ -5,6 +5,7 @@ import OptionItem from "./OptionItem";
 
 function QuestionItem(
   question: QuestionProps,
+  submitted: boolean,
   onSelectOptionForQuestion: (question: QuestionProps) => void
 ) {
   return (
@@ -28,14 +29,19 @@ function QuestionItem(
                 sx={{ py: { xs: 1, sm: 1, lg: 2, xl: 2 } }}
               >
                 {question.options.map((option, index) => {
-                  return OptionItem(option, () => {
-                    let currentQuestion = question;
-                    currentQuestion.options.forEach((value) => {
-                      value.isSelected =
-                        value.id === option.id ? !value.isSelected : false;
-                    });
-                    onSelectOptionForQuestion(currentQuestion);
-                  });
+                  return OptionItem(
+                    option,
+                    question.answerId,
+                    submitted,
+                    () => {
+                      let currentQuestion = question;
+                      currentQuestion.options.forEach((value) => {
+                        value.isSelected =
+                          value.id === option.id ? !value.isSelected : false;
+                      });
+                      onSelectOptionForQuestion(currentQuestion);
+                    }
+                  );
                 })}
               </Stack>
             </Box>

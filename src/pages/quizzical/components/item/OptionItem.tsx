@@ -4,6 +4,8 @@ import { OptionProps } from "../../QuizzicalPage";
 
 function OptionItem(
   option: OptionProps,
+  trueAnswerId: number,
+  submitted: boolean,
   onSelectOption: (option: OptionProps) => void
 ) {
   const OptionBox = styled(Box)<BoxProps>(({ theme }) => ({
@@ -20,11 +22,15 @@ function OptionItem(
   let bgColor = option.isSelected
     ? AppColorConstants.BG_ANSWER_SELECTED
     : AppColorConstants.BG_ANSWER_UNSELECTED;
+
+  if (submitted && option.id === trueAnswerId) {
+    bgColor = AppColorConstants.BG_TRUE_ANSWER;
+  }
   return (
     <>
       <OptionBox
         onClick={() => {
-          onSelectOption(option);
+          submitted == false && onSelectOption(option);
         }}
         sx={{ backgroundColor: bgColor }}
       >

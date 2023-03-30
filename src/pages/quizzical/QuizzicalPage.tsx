@@ -233,6 +233,7 @@ function QuizzicalPage() {
 
   const playAgain = () => {
     setTotalPoint(null);
+    setSubmitted(false);
     let resetedQuestions: QuestionProps[] = [];
     questions.forEach((item) => {
       item.options.forEach((option) => (option.isSelected = false));
@@ -245,7 +246,7 @@ function QuizzicalPage() {
   useEffect(() => {
     const timeId = setTimeout(() => {
       setShowAlert(false);
-    }, 3000);
+    }, 5000);
     return () => {};
   }, [showAlert]);
 
@@ -263,7 +264,7 @@ function QuizzicalPage() {
         }}
       >
         {questions.map((question, _) => {
-          return QuestionItem(question, (selectedQuestion) => {
+          return QuestionItem(question, submitted, (selectedQuestion) => {
             onSelectOptionInQuestion(selectedQuestion);
           });
         })}
