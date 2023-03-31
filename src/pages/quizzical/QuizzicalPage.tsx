@@ -204,7 +204,7 @@ function QuizzicalPage() {
 
   const validateAnswerSubmittion = () => {
     let numAnswerSelection: number = 0;
-    questions.map((item) => {
+    questions.forEach((item) => {
       let index = item.options.findIndex(
         (option) => option.isSelected === true
       );
@@ -252,6 +252,7 @@ function QuizzicalPage() {
 
   return (
     <Box>
+      {showAlert && <AppAlert msg="Please choose your answer" />}
       <Grid
         container
         display={"flex"}
@@ -282,7 +283,6 @@ function QuizzicalPage() {
           playAgain();
         }
       )}
-      {showAlert && <AppAlert msg="Please choose your answer" />}
     </Box>
   );
 }
