@@ -33,15 +33,17 @@ function QuizzicalBottom(
       }}
     >
       {scored == null && (
-        <CustomCheckAnswerButton
-          variant="contained"
-          size="large"
-          onClick={() => {
-            onSubmitAnswer();
-          }}
-        >
-          Check answer
-        </CustomCheckAnswerButton>
+        <Box display={"flex"} sx={{ justifyContent: "center" }}>
+          <CustomCheckAnswerButton
+            variant="contained"
+            size="large"
+            onClick={() => {
+              onSubmitAnswer();
+            }}
+          >
+            Check answer
+          </CustomCheckAnswerButton>
+        </Box>
       )}
 
       {scored && (

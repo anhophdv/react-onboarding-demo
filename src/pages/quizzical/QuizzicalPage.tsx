@@ -191,15 +191,13 @@ function QuizzicalPage() {
   const [totalPoint, setTotalPoint] = useState<number | null>(null);
 
   const onSelectOptionInQuestion = (selectedQuestion: QuestionProps) => {
-    let result: QuestionProps[] = [];
-    questions.forEach((item) => {
-      if (item.id === selectedQuestion.id) {
-        result.push(selectedQuestion);
-      } else {
-        result.push(item);
-      }
-    });
-    setQuestions(result);
+    setQuestions((currentQuestions) =>
+      currentQuestions.map((question, _) =>
+        question.id == selectedQuestion.id
+          ? { ...selectedQuestion }
+          : { ...question }
+      )
+    );
   };
 
   const validateAnswerSubmittion = () => {
