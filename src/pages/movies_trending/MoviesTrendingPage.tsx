@@ -1,4 +1,11 @@
-import { Box, Grid, ToggleButton, ToggleButtonGroup } from "@mui/material";
+import {
+  Box,
+  CircularProgress,
+  Container,
+  Grid,
+  ToggleButton,
+  ToggleButtonGroup,
+} from "@mui/material";
 import { useEffect, useState } from "react";
 import MovieItem from "./components/MoviewItem";
 import {
@@ -14,12 +21,15 @@ interface TrendingViewType {
   name: string;
   isSelected: boolean;
 }
+import CustomizationLoading from "../../components/loading/CustomizationLoading";
 
 function MoviesTrendingPage() {
   var [moviesList, setMoviesList] = useState<Movie[]>([]);
   var [configuration, setConfiguration] = useState<MovieConfiguration | null>(
     null
   );
+
+  const [showLoading, setShowLoading] = useState<boolean>(false);
 
   const dayTrendingView: TrendingViewType = {
     key: "day",
@@ -45,6 +55,7 @@ function MoviesTrendingPage() {
   };
 
   useEffect(() => {
+    setShowLoading(true);
     getConfiguration().then((response) => {
       if (!response) return;
       setConfiguration(response);
@@ -61,6 +72,7 @@ function MoviesTrendingPage() {
             movie.poster_path;
           return movie;
         });
+        setShowLoading(false);
         setMoviesList(moviesResult);
       });
     });
@@ -96,20 +108,22 @@ function MoviesTrendingPage() {
           })}
         </ToggleButtonGroup>
       </Box>
-
-      <Grid
-        container
-        direction={"row"}
-        sx={{ columnGap: { xs: 1, sm: 1, lg: 2, xl: 2 } }}
-      >
-        {moviesList.map((item, index) => {
-          return (
-            <Grid item key={item.id} sx={{ flex: 1 }}>
-              {MovieItem(item)}
-            </Grid>
-          );
-        })}
-      </Grid>
+      {showLoading && <CustomizationLoading />}
+      {!showLoading && (
+        <Grid
+          container
+          direction={"row"}
+          sx={{ columnGap: { xs: 1, sm: 1, lg: 2, xl: 2 } }}
+        >
+          {moviesList.map((item, index) => {
+            return (
+              <Grid item key={item.id} sx={{ flex: 1 }}>
+                {MovieItem(item)}
+              </Grid>
+            );
+          })}
+        </Grid>
+      )}
     </Box>
   );
 
