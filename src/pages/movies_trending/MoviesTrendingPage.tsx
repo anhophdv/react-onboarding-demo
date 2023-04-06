@@ -1,47 +1,43 @@
 import { Box, Grid } from "@mui/material";
-import MovieJSON from "./dumies_data/Movies.json";
-import ConfigurationJSON from "./dumies_data/Configuration.json";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import MovieItem from "./components/MoviewItem";
+import {
+  MovieConfiguration,
+  MovieConfigurationResponse,
+} from "../../domain/model/MovieDBConfiguration";
+import { APIConstants } from "../../constants/ApiConstants";
+import { API } from "../../api/API";
+import Movie, { MovieTrendingResponse } from "../../domain/model/Movie";
 
 function MoviesTrendingPage() {
-  const imagesConfiguration = ConfigurationJSON.images;
-  const configuration: Configuration = {
-    baseUrl: imagesConfiguration.base_url,
-    secureBaseUrl: imagesConfiguration.secure_base_url,
-    backdropSizes: imagesConfiguration.backdrop_sizes.map(
-      (sizeItem, _) => sizeItem
-    ),
-    logoSizes: imagesConfiguration.logo_sizes.map((logoSize, _) => logoSize),
-    posterSizes: imagesConfiguration.poster_sizes.map(
-      (posterSize, _) => posterSize
-    ),
-    profileSizes: imagesConfiguration.profile_sizes.map(
-      (profileSize, _) => profileSize
-    ),
-  };
+  var [moviesList, setMoviesList] = useState<Movie[]>([]);
+  var [configuration, setConfiguration] = useState<MovieConfiguration | null>(
+    null
+  );
 
-  let movies = MovieJSON.results.map((item, index) => {
-    let movie: MovieProps = {
-      id: item.id,
-      title: item.title,
-      originalLanguage: item.original_language,
-      originalTitle: item.original_title,
-      voteCount: item.vote_count,
-      posterPath:
-        configuration.secureBaseUrl +
-        configuration.posterSizes[configuration.posterSizes.length - 1] +
-        item.poster_path,
-      adult: item.adult,
-      overview: item.overview,
-      releaseDate: item.release_date,
-      genreId: item.genre_ids,
-      popularity: item.popularity,
-      backdropPath: item.backdrop_path,
-    };
-    return movie;
-  });
-  var [moviesList, setMoviesList] = useState<MovieProps[]>(movies);
+  useEffect(() => {
+    getConfiguration().then((response) => {
+      if (!response) return;
+      setConfiguration(response);
+      getMovieTrending().then((moviesResponse) => {
+        if (!moviesResponse) return;
+        const moviesResult = moviesResponse.map((movie) => {
+          movie.poster_path =
+            response.secure_base_url +
+            response.poster_sizes[response.poster_sizes.length - 1] +
+            movie.poster_path;
+          return movie;
+        });
+        setMoviesList(moviesResult);
+      });
+    });
+  }, []);
+
+  useEffect(() => {
+    console.log("configuration didSet", configuration);
+    getMovieTrending();
+  }, [configuration]);
+
   return (
     <Box
       display={"flex"}
@@ -65,30 +61,39 @@ function MoviesTrendingPage() {
       </Grid>
     </Box>
   );
-}
 
-export interface MovieProps {
-  id: number;
-  title?: string;
-  originalLanguage: string;
-  originalTitle?: string;
-  voteCount: number;
-  posterPath: string | null;
-  adult: boolean;
-  overview: string;
-  releaseDate?: string;
-  genreId: number[];
-  popularity: number;
-  backdropPath: string | null;
-}
+  async function getConfiguration() {
+    try {
+      const url = APIConstants.movieConfigurationPath;
+      const response = await API.getAxiosInstance().get(url, {
+        params: {
+          api_key: "0302596c4f4e8b4f243a1ec19031031b",
+        },
+      });
+      const data: MovieConfigurationResponse = response.data;
+      const configurationResponse: MovieConfiguration = data.images;
 
-interface Configuration {
-  baseUrl: string;
-  secureBaseUrl: string;
-  backdropSizes: string[];
-  logoSizes: string[];
-  posterSizes: string[];
-  profileSizes: string[];
+      return configurationResponse;
+    } catch (error) {
+      console.log("GetMovieDBConfiguration have an error", error);
+    }
+  }
+
+  async function getMovieTrending() {
+    try {
+      const url = APIConstants.movieTrending + "/all/day";
+      const response = await API.getAxiosInstance().get(url, {
+        params: {
+          api_key: "0302596c4f4e8b4f243a1ec19031031b",
+        },
+      });
+      const movieResponse: MovieTrendingResponse = response.data;
+      const movies: Movie[] = movieResponse.results ?? [];
+      return movies;
+    } catch (error) {
+      console.log("Failed to fetch movie trending list:", error);
+    }
+  }
 }
 
 export default MoviesTrendingPage;
